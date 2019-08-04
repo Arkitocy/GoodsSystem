@@ -57,11 +57,31 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>DeleteServlet</servlet-name>
-        <servlet-class>DeleteServlet</servlet-class>
-    </servlet>
+    <servlet-name>DeleteServlet</servlet-name>
+    <servlet-class>DeleteServlet</servlet-class>
+</servlet>
     <servlet-mapping>
         <servlet-name>DeleteServlet</servlet-name>
         <url-pattern>/DeleteServlet</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ChangeAccountServlet</servlet-name>
+        <servlet-class>ChangeAccountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ChangeAccountServlet</servlet-name>
+        <url-pattern>/ChangeAccountServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UpdateServlet</servlet-name>
+        <servlet-class>UpdateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateServlet</servlet-name>
+        <url-pattern>/UpdateServlet</url-pattern>
+    </servlet-mapping>
+
+
 </web-app>

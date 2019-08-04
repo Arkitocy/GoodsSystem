@@ -8,6 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" import="java.util.*" %>
 <%@ page import="Service.ProductService" %>
 <%@ page import="Entity.Product" %>
+<%@ page import="Service.CategoryService" %>
+<%@ page import="Entity.Category" %>
 <html>
 
 
@@ -219,6 +221,11 @@
                         <td><%=p.getAmount()%>
                         </td>
                         <td>
+                            <button type="button" class="btn btn-primary" name="changebtn" id="<%=p.getId() %>">
+                                编辑
+                            </button>
+                        </td>
+                        <td>
                             <button type="button" class="btn btn-primary" name="addbtn" id="<%=p.getId() %>">
                                 修改库存
                             </button>
@@ -237,6 +244,69 @@
             <!-- ============================================================== -->
             <!-- End PAge Content -->
 
+            <div class="modal fade" id="modalhwdetail">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <!-- 模态框头部 -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">编辑货物</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- 模态框主体 -->
+                        <div class="modal-body">
+                            <form action="UpdateServlet">
+                                <div class="form-group" hidden="hidden">
+                                    <p>id</p>
+                                    <input type="text" class="form-control" id="id" name="id">
+                                </div>
+                                <div class="form-group">
+                                    <p>名称</p>
+                                    <input type="text" class="form-control" id="productname" name="name">
+                                </div>
+                                <div class="form-group">
+                                    <label>类型:</label>
+                                    <select class="form-control" name="category" id="category">
+                                        <%
+                                            CategoryService cs = new CategoryService();
+                                            ArrayList<Category> ac = cs.showCategory();
+                                            for (int i = 0; i < ac.size(); i++) {
+                                        %>
+                                        <option value='<%=ac.get(i).getName()%>'><%=ac.get(i).getName()%></option>
+                                        <%}%>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <p>生产日期</p>
+                                    <input type="date" class="form-control" id="productiondate" name="productiondate">
+                                </div>
+                                <div class="form-group">
+                                    <p>过期</p>
+                                    <input type="date" class="form-control" id="outdate" name="outdate">
+                                </div>
+                                <div class="form-group">
+                                    <p>价格</p>
+                                    <input type="text" class="form-control" id="price" name="price">
+                                </div>
+                                <div class="form-group">
+                                    <p>库存</p>
+                                    <input type="text" class="form-control" id="amount" name="amount">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary" name="btnn">修改</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- 模态框底部 -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
             <!-- ============================================================== -->
         </div>
@@ -259,6 +329,59 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        function SimpleDateFormat(pattern){
+            var fmt = new Object();
+            fmt.pattern = pattern;
+
+            fmt.parse = function(source){
+                try{
+                    return new Date(source);
+                }catch(e){
+                    console.log("字符串 "+source+" 转时间格式失败！");
+                    return null;
+                }
+            };
+
+            fmt.format = function(date){
+                if(typeof(date) == "undefined" || date == null || date==""){
+                    return "";
+                }
+
+                try{
+                    date = new Date(date);
+                }catch(e){
+                    console.log("时间 "+date+" 格式化失败！");
+                    return "";
+                }
+
+                var strTime = this.pattern;//时间表达式的正则
+
+                var o = {
+                    "M+": date.getMonth() + 1, //月份
+                    "d+": date.getDate(), //日
+                    "H+": date.getHours(), //小时
+                    "m+": date.getMinutes(), //分
+                    "s+": date.getSeconds(), //秒
+                    "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+                    "S": date.getMilliseconds() //毫秒
+                };
+
+                if (/(y+)/.test(strTime)){
+                    strTime = strTime
+                        .replace(RegExp.$1, (date.getFullYear() + "")
+                            .substr(4 - RegExp.$1.length));
+                }
+                for (var k in o){
+                    if (new RegExp("(" + k + ")").test(strTime)){
+                        strTime = strTime.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                    }
+                }
+
+                return strTime;
+            };
+            return fmt;
+        }
+
         $("button[name='deletebtn']").click(function () {
             var id = this.id;
             $.getJSON("DeleteServlet", {id: id}, function (json) {
@@ -274,6 +397,27 @@
             })
             $("button[name='btn']").trigger('click');
 
+        })
+
+        $("button[name='changebtn']").click(function () {
+            var id = this.id
+            var fmt = SimpleDateFormat("yyyy-MM-dd");
+            $.getJSON("ChangeAccountServlet", {id: id}, function (json) {
+                $("#changebtn").empty();
+                for(var key in json) {
+                    $("#id").attr("value",json[key].id);
+                    $("#category").attr("value",json[key].category);
+                    $("#productname").attr("value",json[key].name);
+                    $("#productiondate").attr("value",fmt.format(json[key].productiondate));
+                    $("#outdate").attr("value",fmt.format(json[key].outdate));
+                    $("#price").attr("value",json[key].price);
+                    $("#amount").attr("value",json[key].amount);
+                }
+                $('#modalhwdetail').modal("show");
+                $("button[name='btnn']").click(function () {
+                    $("button[name='btn']").trigger('click');
+                })
+            })
         })
 
 
