@@ -8,6 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" import="java.util.*" %>
 <%@ page import="Service.ProductService" %>
 <%@ page import="Entity.Product" %>
+<%@ page import="Service.CategoryService" %>
+<%@ page import="Entity.Category" %>
 <html>
 
 
@@ -49,7 +51,8 @@
 <!-- ============================================================== -->
 <div class="preloader">
     <svg class="circular" viewBox="25 25 50 50">
-        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
+        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+    </svg>
 </div>
 <!-- ============================================================== -->
 <!-- Main wrapper - style you can find in pages.scss -->
@@ -69,14 +72,14 @@
                     <b>
                         <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                         <!-- Dark Logo icon -->
-                        <img src="assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                        <img src="assets/images/logo-icon.png" alt="homepage" class="dark-logo"/>
 
                     </b>
                     <!--End Logo icon -->
                     <!-- Logo text -->
                     <span>
                             <!-- dark Logo text -->
-                            <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                            <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo"/>
                         </span>
                 </a>
             </div>
@@ -89,10 +92,12 @@
                 <!-- ============================================================== -->
                 <ul class="navbar-nav mr-auto mt-md-0 ">
                     <!-- This is  -->
-                    <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+                    <li class="nav-item"><a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark"
+                                            href="javascript:void(0)"><i class="ti-menu"></i></a></li>
                     <li class="nav-item hidden-sm-down">
                         <form class="app-search p-l-20">
-                            <input type="text" class="form-control" placeholder="Search for..."> <a class="srh-btn"><i class="ti-search"></i></a>
+                            <input type="text" class="form-control" placeholder="Search for..."> <a class="srh-btn"><i
+                                class="ti-search"></i></a>
                         </form>
                     </li>
                 </ul>
@@ -101,7 +106,9 @@
                 <!-- ============================================================== -->
                 <ul class="navbar-nav my-lg-0">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%=username%></a>
+                        <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href=""
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%=username%>
+                        </a>
                         <a href="login.html" class="btn btn-danger">登出</a>
                     </li>
                 </ul>
@@ -124,7 +131,8 @@
                         <a href="index.jsp" class="waves-effect"><i class="fa fa-clock-o m-r-10" aria-hidden="true"></i>Dashboard</a>
                     </li>
                     <li>
-                        <a href="index2.jsp" class="waves-effect"><i class="fa fa-clock-o m-r-10" aria-hidden="true"></i>添加商品</a>
+                        <a href="index2.jsp" class="waves-effect"><i class="fa fa-clock-o m-r-10"
+                                                                     aria-hidden="true"></i>添加商品</a>
                     </li>
                     <li>
                         <a href="index3.jsp" class="waves-effect"><i class="fa fa-clock-o m-r-10" aria-hidden="true"></i>商品出库</a>
@@ -166,51 +174,44 @@
             <!-- Start Page Content -->
             <!-- ============================================================== -->
             <!-- Row -->
-            <p>所有商品</p>
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered">
-                    <thead>
-                    <tr>
-                        <th>编号</th>
-                        <th>商品名</th>
-                        <th>类型</th>
-                        <th>生产日期</th>
-                        <th>保质期</th>
-                        <th>价格</th>
-                        <th>库存</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <%
-                        ProductService ps = new ProductService();
-                        ArrayList<Product> a = ps.showAll();
-                        if (a == null) {
-                            a = new ArrayList();
-                        }
-                        for (int i = 0; i < a.size(); i++) {
-                            Product p = a.get(i);
-
-                    %>
-                    <tr>
-                        <td><%=p.getId()%>
-                        </td>
-                        <td><%=p.getName()%>
-                        </td>
-                        <td><%=p.getCategory()%>
-                        </td>
-                        <td><%=p.getProductiondate()%>
-                        </td>
-                        <td><%=p.getOutdate()%>
-                        </td>
-                        <td><%=p.getPrice()%>
-                        </td>
-                        <td><%=p.getAmount()%>
-                        </td>
-                    </tr>
-                    <% }%>
-                    </tbody>
-                </table>
-            </div>
+            <p>添加商品</p>
+            <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content" role="main">
+                <form action="AddProductServlet">
+                    <div class="form-group">
+                        <label>商品名:</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label>类型:</label>
+                        <select class="form-control" name="category">
+                            <%
+                                CategoryService cs = new CategoryService();
+                                ArrayList<Category> ac = cs.showCategory();
+                                for (int i = 0; i < ac.size(); i++) {
+                            %>
+                            <option value='<%=ac.get(i).getName()%>'><%=ac.get(i).getName()%></option>
+                            <%}%>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>生产日期:</label>
+                        <input type="date" class="form-control" name="productiondate">
+                    </div>
+                    <div class="form-group">
+                        <label>保质日期:</label>
+                        <input type="date" class="form-control" name="outdate">
+                    </div>
+                    <div class="form-group">
+                        <label>价格:</label>
+                        <input type="text" class="form-control" id="price" name="price">
+                    </div>
+                    <div class="form-group">
+                        <label>库存:</label>
+                        <input type="text" class="form-control" id="amount" name="amount">
+                    </div>
+                    <button type="submit" class="btn btn-primary">添加</button>
+                </form>
+            </main>
             <!-- Row -->
             <!-- ============================================================== -->
             <!-- End PAge Content -->

@@ -30,5 +30,38 @@
         <servlet-name>CheckUserNameServlet</servlet-name>
         <url-pattern>/CheckUserNameServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>AddProductServlet</servlet-name>
+        <servlet-class>AddProductServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddProductServlet</servlet-name>
+        <url-pattern>/AddProductServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ProductSelectServlet</servlet-name>
+        <servlet-class>ProductSelectServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProductSelectServlet</servlet-name>
+        <url-pattern>/ProductSelectServlet</url-pattern>
+    </servlet-mapping>
 
+    <servlet>
+        <servlet-name>AddAmountServlet</servlet-name>
+        <servlet-class>AddAmountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddAmountServlet</servlet-name>
+        <url-pattern>/AddAmountServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeleteServlet</servlet-name>
+        <servlet-class>DeleteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteServlet</servlet-name>
+        <url-pattern>/DeleteServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

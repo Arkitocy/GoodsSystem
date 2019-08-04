@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class Product {
-    private int id;
+    private String id;
     private String name;
     private String category;
     private Date productiondate;
@@ -40,11 +40,11 @@ public class Product {
         this.price = price;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
